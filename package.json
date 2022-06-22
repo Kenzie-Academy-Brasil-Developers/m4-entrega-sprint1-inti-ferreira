@@ -1,0 +1,25 @@
+{
+  "name": "m4-entrega-sprint1-inti-ferreira",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "git@github.com:Kenzie-Academy-Brasil-Developers/m4-entrega-sprint1-inti-ferreira.git",
+  "author": "inti ferreira <inti.lima@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "engines": {
+    "node": ">=17"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16",
+    "sucrase": "^3.21.0"
+  }
+}
