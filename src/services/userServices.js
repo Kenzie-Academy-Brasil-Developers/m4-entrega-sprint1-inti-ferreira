@@ -1,8 +1,11 @@
 import { v4 } from "uuid";
 import * as bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 import { users } from "../database/index";
+
+dotenv.config();
 
 const createUserService = async (name, email, password, isAdm) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -63,17 +66,20 @@ const readUsersDatabaseService = () => {
 const readUserProfileService = (token) => {
   const isAuth = jwt.decode(token);
   const profile = users.find((el) => el.email === isAuth.email);
-  return {
-    status: 200,
-    message: {
-      uuid: profile.id,
-      createdOn: profile.createdOn,
-      updatedOn: profile.updatedOn,
-      name: profile.name,
-      email: profile.email,
-      isAdm: profile.isAdm,
-    },
-  };
+
+  if (profile) {
+    return {
+      status: 200,
+      message: {
+        uuid: profile.id,
+        createdOn: profile.createdOn,
+        updatedOn: profile.updatedOn,
+        name: profile.name,
+        email: profile.email,
+        isAdm: profile.isAdm,
+      },
+    };
+  }
 };
 
 const updateUserService = () => {};

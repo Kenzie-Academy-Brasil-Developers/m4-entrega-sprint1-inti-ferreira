@@ -55,3 +55,5 @@ export {
   updateUserController,
   deleteUserController,
 };
+
+// sudo kill -9 $(sudo lsof -t -i:3000)

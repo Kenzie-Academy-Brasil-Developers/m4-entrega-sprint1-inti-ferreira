@@ -1,18 +1,23 @@
 import jwt  from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const verifyAuthTokenMiddleware = (req, res, next) => {
-  let authToken = req.headers.authorization;
+  const authToken = req.headers.authorization?.split(" ")[1];
 
   if (!authToken) {
     return res.status(401).json({ "message": "Missing authorization headers" });
   };
 
-  jwt.verify(authToken, "SECRET_KEY", (error, decoded) => {
+  return jwt.verify(authToken, process.env.SECRET_KEY, (error, decoded) => {
     if (error) {
       return res.status(401).json({ "message": "Missing authorization headers" });
     };
-    request.decoded = decoded;
-    next();
+
+    req.decoded = decoded;
+
+    return next();
   });
 };
 
