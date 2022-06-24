@@ -52,7 +52,7 @@ const loginUserService = (email, password) => {
 
   return {
     status: 200,
-    message: { "token": authToken },
+    message: { token: authToken },
   };
 };
 
@@ -65,9 +65,7 @@ const readUsersDatabaseService = () => {
 
 const readUserProfileService = (email) => {
   // const isAuth = jwt.decode(token);
-  console.log(email)
   const profile = users.find((el) => el.email === email);
-  console.log(profile)
 
   if (profile) {
     return {
@@ -98,9 +96,6 @@ export {
 };
 
 /*
-create - 201, 400/email
-read user db - 200, 401/token, 401/admin
-read user - 200, 401/token
 update - 200, 401/token, 401/admin
 delete - 200, 401/token, 401/admin
 */
