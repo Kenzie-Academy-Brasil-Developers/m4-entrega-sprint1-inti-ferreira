@@ -1,14 +1,17 @@
 import jwt from "jsonwebtoken";
-import { users } from "../database";
+import dotenv from "dotenv"
+import { users }from "../database"
+
+dotenv.config()
 
 const verifyIsAdmMiddleware = (req, res, next) => {
-  const { headers } = req;
+  const authToken = req.headers.authorization?.split(" ")[1];
+  const user = jwt.decode(authToken, process.env.SECRET_KEY)
+  console.log(user)
 
-  const userAuth = jwt.decode(headers.authorization);
+  const isUserAdm = users.find((el) => el.email === user.email);
 
-  const isAdm = users.filter((el) => el.id === userAuth.id);
-
-  if (!isAdm.isAdm) {
+  if (!isUserAdm.isAdm) {
     return res.status(401).json({ "message": "Unauthorized" });
   }
 

@@ -63,9 +63,11 @@ const readUsersDatabaseService = () => {
   };
 };
 
-const readUserProfileService = (token) => {
-  const isAuth = jwt.decode(token);
-  const profile = users.find((el) => el.email === isAuth.email);
+const readUserProfileService = (email) => {
+  // const isAuth = jwt.decode(token);
+  console.log(email)
+  const profile = users.find((el) => el.email === email);
+  console.log(profile)
 
   if (profile) {
     return {

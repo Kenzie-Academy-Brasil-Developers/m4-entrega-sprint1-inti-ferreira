@@ -30,8 +30,12 @@ const readUsersDatabaseController = (_, res) => {
 };
 
 const readUserProfileController = (req, res) => {
+  const authToken = req.headers.authorization?.split(" ")[1];
+  const { email } = req.decoded;
+  console.log(authToken)
   const token = req.headers.authorization
-  const { status, message } = readUserProfileService(token);
+  console.log(token)
+  const { status, message } = readUserProfileService(email);
   return res.status(status).json(message);
 };
 
@@ -55,5 +59,3 @@ export {
   updateUserController,
   deleteUserController,
 };
-
-// sudo kill -9 $(sudo lsof -t -i:3000)
