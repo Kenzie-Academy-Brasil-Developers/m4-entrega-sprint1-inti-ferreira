@@ -17,18 +17,20 @@ import {
 } from "../middlewares/index.js";
 
 router.post("/users", verifyEmailAvailabilityMiddleware, createUserController);
+
 router.post("/login", loginUserController);
+
+router.get(
+  "/users/profile",
+  verifyAuthTokenMiddleware,
+  readUserProfileController
+);
 
 router.get(
   "/users",
   verifyAuthTokenMiddleware,
   verifyIsAdmMiddleware,
   readUsersDatabaseController
-);
-router.get(
-  "/users/profile",
-  verifyAuthTokenMiddleware,
-  readUserProfileController
 );
 
 router.patch(
@@ -37,6 +39,7 @@ router.patch(
   verifyIsAdmMiddleware,
   updateUserController
 );
+
 router.delete(
   "/users/:uuid",
   verifyAuthTokenMiddleware,

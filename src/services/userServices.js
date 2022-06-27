@@ -64,7 +64,6 @@ const readUsersDatabaseService = () => {
 };
 
 const readUserProfileService = (email) => {
-  // const isAuth = jwt.decode(token);
   const profile = users.find((el) => el.email === email);
 
   if (profile) {
@@ -82,9 +81,20 @@ const readUserProfileService = (email) => {
   }
 };
 
-const updateUserService = () => {};
+const updateUserService = () => {
+  // update - 200, 401/token, 401/admin
+};
 
-const deleteUserService = () => {};
+const deleteUserService = () => {
+  const userIndex = users.findIndex((user) => user.id === id);
+  users.splice(userIndex, 1);
+
+  return {
+    status: 200, 
+    message: "User deleted with success"
+  };
+  // delete - 200, 401/token, 401/admin
+};
 
 export {
   createUserService,
@@ -94,8 +104,3 @@ export {
   updateUserService,
   deleteUserService,
 };
-
-/*
-update - 200, 401/token, 401/admin
-delete - 200, 401/token, 401/admin
-*/

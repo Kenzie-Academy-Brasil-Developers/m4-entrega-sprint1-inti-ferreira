@@ -17,7 +17,7 @@ const verifyAuthTokenMiddleware = (req, res, next) => {
 
     req.decoded = decoded;
 
-    return next();
+    next();
   });
 };
 
