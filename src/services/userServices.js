@@ -82,18 +82,18 @@ const readUserProfileService = (email) => {
 };
 
 const updateUserService = () => {
-  // update - 200, 401/token, 401/admin
+  // update - 200
 };
 
-const deleteUserService = () => {
-  const userIndex = users.findIndex((user) => user.id === id);
-  users.splice(userIndex, 1);
+const deleteUserService = (uuid) => {
+  const isUserRemoved = users.findIndex((el) => el.id === uuid);
+  users.splice(isUserRemoved, 1);
 
   return {
     status: 200, 
-    message: "User deleted with success"
+    message: { "message": "User deleted with success" }
   };
-  // delete - 200, 401/token, 401/admin
+  // delete - 200
 };
 
 export {
