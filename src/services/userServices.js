@@ -81,19 +81,34 @@ const readUserProfileService = (email) => {
   }
 };
 
-const updateUserService = () => {
-  // update - 200
+const updateUserService = ({ user, body}) => {
+  if (body.password) {
+    const hashedPass = await bcrypt.hash(body.password, 10);
+    body.password = hashedPass;
+  }
+
+  if (body.email) body.email.toLowerCase()
+  if (body.isAdm) body.isAdm = false;
+  
+  body.updatedOn = new Date();
+  Object.assign(user, body);
+
+  return {
+    status: 200,
+    message: { "message": user }
+  }
 };
 
 const deleteUserService = (uuid) => {
-  const isUserRemoved = users.findIndex((el) => el.id === uuid);
-  users.splice(isUserRemoved, 1);
+  const removeThisUser = users.findIndex((el) => el.id === uuid);
 
-  return {
-    status: 200, 
-    message: { "message": "User deleted with success" }
-  };
-  // delete - 200
+  if (removeThisUser || removeThisUser.isAdm) {
+    users.splice(removeThisUser, 1);
+    return {
+      status: 200, 
+      message: { "message": "User deleted with success", }
+    };
+  }
 };
 
 export {
