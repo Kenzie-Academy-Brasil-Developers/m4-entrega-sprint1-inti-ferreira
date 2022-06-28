@@ -10,7 +10,7 @@ dotenv.config();
 const createUserService = async (name, email, password, isAdm) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser = {
+  const user = {
     name,
     email: email.toLowerCase(),
     password: hashedPassword,
@@ -20,17 +20,17 @@ const createUserService = async (name, email, password, isAdm) => {
     id: v4(),
   };
 
-  users.push(newUser);
+  users.push(user);
 
   return {
     status: 201,
     message: {
-      uuid: newUser.id,
-      createdOn: newUser.createdOn,
-      updatedOn: newUser.updatedOn,
-      name: newUser.name,
-      email: newUser.email,
-      isAdm: newUser.isAdm,
+      uuid: user.id,
+      createdOn: user.createdOn,
+      updatedOn: user.updatedOn,
+      name: user.name,
+      email: user.email,
+      isAdm: user.isAdm,
     },
   };
 };
@@ -81,32 +81,55 @@ const readUserProfileService = (email) => {
   }
 };
 
-const updateUserService = ({ user, body}) => {
-  if (body.password) {
-    const hashedPass = await bcrypt.hash(body.password, 10);
-    body.password = hashedPass;
+const updateUserService = async (uuid, { user, body }) => {
+  const updateThisUser = users.findIndex((el) => el.id === uuid);
+
+  if (!updateThisUser && user.isAdm === false) {
+    return {
+      status: 401,
+      message: { message: "Missing admin permissions" },
+    };
   }
 
-  if (body.email) body.email.toLowerCase()
-  if (body.isAdm) body.isAdm = false;
-  
-  body.updatedOn = new Date();
-  Object.assign(user, body);
+  if (updateThisUser || user.isAdm === true) {
+    if (body.password) {
+      const hashedPass = await bcrypt.hash(body.password, 10);
+      body.password = hashedPass;
+    }
 
-  return {
-    status: 200,
-    message: { "message": user }
+    if (body.email) body.email.toLowerCase();
+    if (body.isAdm) body.isAdm = false;
+
+    Object.assign(user, body);
+    return {
+      status: 200,
+      message: {
+        uuid: user.id,
+        createdOn: user.createdOn,
+        updatedOn: new Date(),
+        name: user.name,
+        email: user.email,
+        isAdm: user.isAdm,
+      },
+    };
   }
 };
 
-const deleteUserService = (uuid) => {
+const deleteUserService = (uuid, req) => {
   const removeThisUser = users.findIndex((el) => el.id === uuid);
 
-  if (removeThisUser || removeThisUser.isAdm) {
+  if (!removeThisUser && req.user.isAdm === false) {
+    return {
+      status: 401,
+      message: { message: "Missing admin permissions" },
+    };
+  }
+
+  if (removeThisUser || req.user.isAdm === true) {
     users.splice(removeThisUser, 1);
     return {
-      status: 200, 
-      message: { "message": "User deleted with success", }
+      status: 200,
+      message: { message: "User deleted with success" },
     };
   }
 };

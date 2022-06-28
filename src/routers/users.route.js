@@ -36,14 +36,12 @@ router.get(
 router.patch(
   "/users/:uuid",
   verifyAuthTokenMiddleware,
-  verifyIsAdmMiddleware,
   updateUserController
 );
 
 router.delete(
   "/users/:uuid",
   verifyAuthTokenMiddleware,
-  verifyIsAdmMiddleware,
   deleteUserController
 );
 

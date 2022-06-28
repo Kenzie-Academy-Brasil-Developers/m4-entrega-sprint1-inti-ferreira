@@ -36,13 +36,14 @@ const readUserProfileController = (req, res) => {
 };
 
 const updateUserController = (req, res) => {
-  const { status, message } = updateUserService(req);
+  const { uuid } = req.params;
+  const { status, message } = updateUserService(uuid, req);
   return res.status(status).json(message);
 };
 
 const deleteUserController = (req, res) => {
   const { uuid } = req.params;
-  const { status, message } = deleteUserService(uuid);
+  const { status, message } = deleteUserService(uuid, req);
   return res.status(status).json(message);
 };
 
