@@ -33,16 +33,8 @@ router.get(
   readUsersDatabaseController
 );
 
-router.patch(
-  "/users/:uuid",
-  verifyAuthTokenMiddleware,
-  updateUserController
-);
+router.patch("/users/:uuid", verifyAuthTokenMiddleware, updateUserController);
 
-router.delete(
-  "/users/:uuid",
-  verifyAuthTokenMiddleware,
-  deleteUserController
-);
+router.delete("/users/:uuid", verifyAuthTokenMiddleware, deleteUserController);
 
 export default router;

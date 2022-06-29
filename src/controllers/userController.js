@@ -35,16 +35,16 @@ const readUserProfileController = (req, res) => {
   return res.status(status).json(message);
 };
 
-const updateUserController = (req, res) => {
-  const { user } = updateUserService(req);
-  return res.status(200).json(user);
+const updateUserController = async (req, res) => {
+  const userUpdateService = await updateUserService(req);
+  const { status, message } = userUpdateService;
+  return res.status(status).json(message);
 };
 
-const deleteUserController = (req, res) => {
-  // const { uuid } = req.user;
-  // const { id } = req.params;
-  // const { status, message } = deleteUserService(uuid, id);
-  // return res.status(status).json(message);
+const deleteUserController = async (req, res) => {
+  const userDeleteService = await deleteUserService(req);
+  const { status, message } = userDeleteService;
+  return res.status(status).json(message);
 };
 
 export {

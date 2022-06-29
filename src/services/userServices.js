@@ -82,16 +82,16 @@ const readUserProfileService = (email) => {
 };
 
 const updateUserService = async (req) => {
-  const { body } = req
+  const { body } = req;
   const { uuid } = req.params;
 
   const token = req.headers.authorization.split(" ")[1];
   const authToken = jwt.decode(token, process.env.SECRET_KEY);
-  
+
   const isUserAdm = users.find((el) => el.email === authToken.email);
   const user = users.find((el) => el.id === uuid);
 
-  if (!isUserAdm.isAdm && !user) { 
+  if (!isUserAdm.isAdm && !user) {
     return {
       status: 401,
       message: { message: "Missing admin permissions" },
@@ -102,34 +102,38 @@ const updateUserService = async (req) => {
     if (body.password) {
       const hashedPass = await bcrypt.hash(body.password, 10);
       body.password = hashedPass;
-    };
+    }
 
-    if (body.email) body.email.toLowerCase(); 
+    if (body.email) body.email.toLowerCase();
     if (body.isAdm) body.isAdm = false;
-    Object.assign(user, body); 
+    Object.assign(user, body);
   }
-  
-  console.log(user)
-  return { user: user }; // ate
+
+  return { status: 200, message: user };
 };
 
-const deleteUserService = (uuid, req, email) => {
-  // const removeThisUser = users.findIndex((el) => el.id === uuid);
+const deleteUserService = async (req) => {
+  const { uuid } = req.params;
+  const token = req.headers.authorization.split(" ")[1];
+  const authToken = await jwt.decode(token, process.env.SECRET_KEY);
 
-  // if (!removeThisUser && req.user.isAdm === false) {
-  //   return {
-  //     status: 401,
-  //     message: { message: "Missing admin permissions" },
-  //   };
-  // }
+  const isUserAdm = users.find((el) => el.email === authToken.email);
+  const user = users.find((el) => el.id === uuid);
 
-  // if (removeThisUser || req.user.isAdm === true) {
-  //   users.splice(removeThisUser, 1);
-  //   return {
-  //     status: 200,
-  //     message: { message: "User deleted with success" },
-  //   };
-  // }
+  console.log(isUserAdm.isAdm);
+  if (!isUserAdm.isAdm && !user) {
+    return {
+      status: 401,
+      message: { message: "Missing admin permissions" },
+    };
+  }
+  if (user || isUserAdm.isAdm === true) {
+    users.splice(user, 1);
+    return {
+      status: 200,
+      message: { message: "User deleted with success" },
+    };
+  }
 };
 
 export {
